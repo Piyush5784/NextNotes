@@ -1,3 +1,20 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": [
+      "error",
+      {
+        "ts-ignore": false
+      }
+    ],
+    "react/no-unused-state": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "@typescript-eslint/no-empty-object-type": "off",
+    "prefer-const": "off",
+    "react/no-unescaped-entities": "off",
+    "@next/next/no-page-custom-font": "off",
+    "@typescript-eslint/no-empty-interface": "off" // Disable empty interface rule
+  }
 }

@@ -8,7 +8,7 @@
 
 # testing
 /coverage
-
+tailwind.config copy.ts
 # next.js
 /.next/
 /out/
