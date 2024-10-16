@@ -17,7 +17,7 @@ export default function SideNav() {
         <UserInfo />
       </div>
 
-      <div className="flex grow flex-col justify-between mt-4 space-y-2">
+      <div className="flex grow md:flex-col justify-between mt-4 space-y-2">
         <NavLinks />
         <div className="hidden h-auto w-full grow rounded-md md:block"></div>
         <LogoutButton />

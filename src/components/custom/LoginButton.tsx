@@ -12,19 +12,23 @@ const LoginButton = () => {
       <motion.div>
         {status === "authenticated" ? (
           <>
-            <Button
-              onClick={() => signOut()}
-              className="bg-purple-600 hover:bg-purple-800"
-            >
-              Logout
-            </Button>
-            <Button
-              variant={"outline"}
-              className="ml-2 dark:text-white text-black"
-              onClick={() => router.push("/pages/dashboard")}
-            >
-              Dashboard
-            </Button>
+            {" "}
+            <div className="flex w-full">
+              <motion.div
+                onClick={() => signOut()}
+                variants={slideInFromLeft(1)}
+                className=" py-[6px] space-x-1 button-primary duration-100 cursor-pointer rounded-lg min-w-[100px] text-gray-900 button-primary text-center dark:text-white"
+              >
+                Logout
+              </motion.div>
+              <Button
+                variant={"outline"}
+                className="hidden ml-2 md:inline-flex border border-primary bg-transparent hover:bg-hoverBg hover:border-secondary text-accent hover:text-primary shadow-inner hover:shadow-hoverShadow transition-all duration-300 "
+                onClick={() => router.push("/pages/dashboard")}
+              >
+                Dashboard
+              </Button>
+            </div>
           </>
         ) : (
           <>
@@ -41,6 +45,7 @@ const LoginButton = () => {
               <Button
                 variant="outline"
                 className="hidden ml-2 md:inline-flex border border-primary bg-transparent hover:bg-hoverBg hover:border-secondary text-accent hover:text-primary shadow-inner hover:shadow-hoverShadow transition-all duration-300 "
+                onClick={() => router.push("/pages/dashboard")}
               >
                 Dashboard
               </Button>

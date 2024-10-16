@@ -65,7 +65,7 @@ export default function Appbar() {
       {/* Mobile Menu */}
       <div className="absolute w-[90%] dark:text-black">
         <div
-          className={`flex duration-300 flex-col w-full bg-white border justify-center items-center shadow-xl relative ${
+          className={`flex duration-300 flex-col w-full bg-primary dark:text-white border justify-center items-center shadow-xl relative ${
             showMenu ? "top-0" : "top-[-500px]"
           }  m-4 rounded-3xl p-1`}
         >

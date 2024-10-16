@@ -1,10 +1,9 @@
 "use client";
-import PrimaryButton from "@/components/custom/PrimaryButton";
 import { Button } from "@/components/ui/button";
 import useGetAllNotes from "@/hooks/useGetAllNotes";
 import { BaseUrl, Note } from "@/types/TsTypes";
 import axios from "axios";
-import { RefreshCw, RotateCcw, Trash } from "lucide-react";
+import { RotateCcw, Trash } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -67,34 +66,25 @@ const Page = () => {
         <div className="flex justify-between">
           <h1 className="text-4xl font-bold text-center mb-12">Trash Notes</h1>
 
-          <PrimaryButton disabled={refreshing} onClickEvent={handleRefresh}>
-            Refresh
-            <RefreshCw
-              size={24}
-              className={`ml-2 transition-transform ${
-                refreshing ? "animate-spin" : ""
-              }`}
-            />
-          </PrimaryButton>
-        </div>
+          <div className="flex justify-end">
+            <Button
+              onClick={() => setIsDialogOpen(true)}
+              disabled={ids.length === 0}
+              variant={"destructive"}
+              className="bg-red-500 "
+            >
+              Delete All
+            </Button>
+          </div>
 
-        <CustomDialog
-          setIsDialogOpen={setIsDialogOpen}
-          isOpen={isDialogOpen}
-          title="Delete All Notes"
-          description="Are you sure you want to permanently delete all notes from trash? This action cannot be undone."
-          onClose={() => setIsDialogOpen(false)}
-          onConfirm={() => handlerDeleteALLNotes(ids)}
-        />
-        <div className="flex justify-end w-full">
-          <Button
-            onClick={() => setIsDialogOpen(true)}
-            disabled={ids.length === 0}
-            variant={"destructive"}
-            className="bg-red-500 "
-          >
-            Delete All
-          </Button>
+          <CustomDialog
+            setIsDialogOpen={setIsDialogOpen}
+            isOpen={isDialogOpen}
+            title="Delete All Notes"
+            description="Are you sure you want to permanently delete all notes from trash? This action cannot be undone."
+            onClose={() => setIsDialogOpen(false)}
+            onConfirm={() => handlerDeleteALLNotes(ids)}
+          />
         </div>
         {trashNotes.length === 0 ? ( // Check if there are no trash notes
           <div className="flex items-center justify-center min-h-[300px]">

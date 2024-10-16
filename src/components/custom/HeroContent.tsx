@@ -8,18 +8,27 @@ import {
 import { motion } from "framer-motion";
 import { SparklesIcon } from "lucide-react";
 import Link from "next/link";
+import { BackgroundGradient } from "../acernity-components/Background-gradiant";
+import { HoverBorderGradient } from "../acernity-components/Hover-border-gradiant";
 
 const HeroContent = () => {
   return (
     <motion.div
       initial="hidden"
       animate="visible"
-      className="relative h-screen text-gray-900 flex flex-row items-center justify-center px-20 w-full z-[20]"
+      className="relative h-screen text-gray-900 flex flex-row items-center justify-center px-20 w-auto z-[20]"
     >
       {/* Background Grid */}
-      <div className="absolute inset-0  bg-[url('/gridLines.jpg')] bg-cover opacity-5 z-[-1]" />
-      {/* <div className="absolute inset-0 dark:bg-grid-white/[0.06] bg-grid-black/[0.04] [mask-image:linear-gradient(to_bottom,white_5%,transparent_20%)] pointer-events-none select-none"></div> */}
-      <div className="h-full w-full flex flex-col gap-5 justify-center m-auto text-start">
+      {/* <div className="absolute inset-0  bg-[url('/gridLines.jpg')] bg-cover opacity-5 z-[-1]" /> */}
+      <div className="absolute inset-0 dark:bg-grid-white/[0.06] bg-grid-black/[0.04] [mask-image:linear-gradient(to_bottom,white_5%,transparent_20%)] pointer-events-none select-none"></div>
+
+      <div className="absolute right-10 bottom-0 md:bottom-20 md:h-96 w-96 rounded-full opacity-10 blur-3xl bg-gradient-to-r from-purple-600 to-blue-600"></div>
+
+      <div className="absolute top-10 left-0 md:left-20 h-96 w-96 rounded-full opacity-10 blur-3xl bg-gradient-to-r from-indigo-400 to-purple-600"></div>
+
+      <div className="absolute right-10 bottom-20 h-96 w-96 rounded-full opacity-5 blur-3xl bg-gradient-to-r from-purple-400 to-pink-600"></div>
+
+      <div className="h-full w-full flex flex-col gap-5 justify-center m-auto text-center items-center">
         <motion.div
           variants={slideInFromTop}
           className="Welcome-box py-[8px] px-[7px] border border-[#7042f88b] opacity-[0.9]"
@@ -32,7 +41,7 @@ const HeroContent = () => {
 
         <motion.div
           variants={slideInFromLeft(0.5)}
-          className="flex flex-col dark:text-white gap-6 mt-6 text-6xl font-bold  max-w-[600px] w-auto h-auto"
+          className="flex flex-col dark:text-white gap-6 mt-6 text-3xl md:text-6xl font-bold w-auto h-auto"
         >
           <span>
             Capture Your
@@ -52,29 +61,11 @@ const HeroContent = () => {
           lists, and organize your life with ease.
         </motion.p>
         <Link href={"/pages/signin"}>
-          <motion.div
-            variants={slideInFromLeft(1)}
-            className="py-2 text-gray-900 button-primary text-center dark:text-white cursor-pointer rounded-lg max-w-[200px]"
-          >
+          <HoverBorderGradient className="py-2 button-primary text-center text-white cursor-pointer rounded-full text-lg min-w-[200px]">
             Try it now!
-          </motion.div>
+          </HoverBorderGradient>
         </Link>
       </div>
-
-      <motion.div
-        variants={slideInFromRight(0.8)}
-        className="w-full h-full flex justify-center items-center"
-      >
-        <div className="absolute right-10 bottom-20 h-96 w-96 rounded-full opacity-15 blur-3xl bg-gradient-to-r from-purple-600 to-blue-600"></div>
-        {/* <div className="absolute right-1 bottom-[33rem] rounded-full h-[5rem] w-[42rem] opacity-50 blur-3xl   bg-gradient-to-r from-purple-600 to-blue-600"></div> */}
-        <video
-          autoPlay
-          muted
-          className="w-full h-auto border border-gradient-to-r from-purple-600 to-blue-600  rounded-lg"
-        >
-          <source src="/Demo.mp4" type="video/mp4" />
-        </video>
-      </motion.div>
     </motion.div>
   );
 };

@@ -23,13 +23,6 @@ import { FcGoogle } from "react-icons/fc";
 import { IoLogoGithub } from "react-icons/io";
 import { IconContext } from "react-icons/lib";
 import { z } from "zod";
-function onSubmit(values: z.infer<typeof formSchema>) {
-  toast.promise(signIn("credentials", values), {
-    loading: "signing...",
-    success: <b>User logged in!</b>,
-    error: <b>Failed to login user.</b>,
-  });
-}
 
 export default function ProfileForm() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -43,7 +36,11 @@ export default function ProfileForm() {
 
   const [showPassword, setShowPassword] = useState(false);
   const { status } = useSession();
+
   const router = useRouter();
+  if (status == "authenticated") {
+    return router.push("/pages/dashboard");
+  }
   function googleSignInHandler(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     return signIn("google");
@@ -60,8 +57,18 @@ export default function ProfileForm() {
     e.preventDefault();
     return signIn("google");
   }
-  if (status == "authenticated") {
-    return router.push("/pages/dashboard");
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const res = await signIn("credentials", values);
+      if (res == undefined) {
+        toast.error("Failed to login");
+      } else {
+        toast.success("Login Successfull");
+      }
+    } catch (error) {
+      toast.error("falied to login");
+    }
   }
 
   return (
@@ -146,8 +153,8 @@ export default function ProfileForm() {
                 <div className="flex items-center  justify-center">
                   <Button
                     type="submit"
-                    variant={"secondary"}
-                    className="w-full mt-3  font-bold flex justify-center rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground shadow-sm hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                    variant={"outline"}
+                    className="hidden md:inline-flex border border-primary bg-transparent mb-3 hover:bg-purple-400  hover:border-secondary text-purple-200 hover:text-white shadow-inner hover:shadow-hoverShadow transition-all duration-300 w-full"
                   >
                     Login
                   </Button>

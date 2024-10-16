@@ -32,7 +32,7 @@ export default function Page() {
       <div>
         <div className="flex justify-between">
           <h1 className="text-3xl font-bold mb-6">My Notes</h1>
-          <PrimaryButton disabled={refreshing} onClickEvent={handleRefresh}>
+          {/* <PrimaryButton disabled={refreshing} onClickEvent={handleRefresh}>
             Refresh
             <RefreshCw
               size={24}
@@ -40,7 +40,7 @@ export default function Page() {
                 refreshing ? "animate-spin" : ""
               }`}
             />
-          </PrimaryButton>
+          </PrimaryButton> */}
         </div>
 
         {isLoading ? (
