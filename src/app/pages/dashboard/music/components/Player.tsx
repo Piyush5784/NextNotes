@@ -4,7 +4,7 @@
 import axios from "axios";
 import { useState } from "react";
 
-const MusicPlayer = () => {
+const Player = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [songs, setSongs] = useState([]);
   const [playingSong, setPlayingSong] = useState("");
@@ -84,4 +84,4 @@ const MusicPlayer = () => {
   );
 };
 
-export default MusicPlayer;
+export default Player;
