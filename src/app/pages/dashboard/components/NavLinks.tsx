@@ -34,6 +34,7 @@ export default function NavLinks() {
               {
                 "bg-purple-700 text-purple-100": pathname === link.href,
                 "text-purple-600": !(pathname === link.href),
+                "mt-3": true,
               }
             )}
           >

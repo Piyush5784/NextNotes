@@ -52,7 +52,7 @@ const SubscribeEmail = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
         <Input
-          className="flex-1"
+          className="flex-1 p-3 md:p-0"
           placeholder="Enter your email"
           type="email"
           {...register("email")}
@@ -61,8 +61,8 @@ const SubscribeEmail = () => {
         <Button
           disabled={submitting}
           type="submit"
-          className="inline-flex active:ring-0 active:border-none p-3 px-5 animate-shimmer items-center justify-center rounded-md  bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] font-medium  focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50
-        ml-4
+          className="inline-flex active:ring-0 active:border-none md:p-3  md:px-5 animate-shimmer items-center justify-center rounded-md  bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] font-medium  focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50
+        md:ml-4
         border text-primary border-primary bg-transparent hover:bg-hoverBg hover:border-secondary  hover:text-primary hover:shadow-hoverShadow transition-all  "
         >
           Subscribe

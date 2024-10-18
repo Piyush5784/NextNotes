@@ -154,7 +154,7 @@ export default function ProfileForm() {
                   <Button
                     type="submit"
                     variant={"outline"}
-                    className="hidden md:inline-flex border border-primary bg-transparent mb-3 hover:bg-purple-400  hover:border-secondary text-purple-200 hover:text-white shadow-inner hover:shadow-hoverShadow transition-all duration-300 w-full"
+                    className=" inline-flex border border-primary bg-transparent mb-3 hover:bg-purple-400  hover:border-secondary text-purple-200 hover:text-white shadow-inner hover:shadow-hoverShadow transition-all duration-300 w-full"
                   >
                     Login
                   </Button>

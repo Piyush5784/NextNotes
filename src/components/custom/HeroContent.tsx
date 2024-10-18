@@ -22,9 +22,9 @@ const HeroContent = () => {
       {/* <div className="absolute inset-0  bg-[url('/gridLines.jpg')] bg-cover opacity-5 z-[-1]" /> */}
       <div className="absolute inset-0 dark:bg-grid-white/[0.06] bg-grid-black/[0.04] [mask-image:linear-gradient(to_bottom,white_5%,transparent_20%)] pointer-events-none select-none"></div>
 
-      <div className="absolute right-10 bottom-0 md:bottom-20 md:h-96 w-96 rounded-full opacity-10 blur-3xl bg-gradient-to-r from-purple-600 to-blue-600"></div>
+      <div className="absolute right-10 bottom-0 md:bottom-20 md:h-96 w-96 rounded-full opacity-25 blur-3xl bg-gradient-to-r from-purple-600 to-blue-600"></div>
 
-      <div className="absolute top-10 left-0 md:left-20 h-96 w-96 rounded-full opacity-10 blur-3xl bg-gradient-to-r from-indigo-400 to-purple-600"></div>
+      <div className="absolute top-10 left-0 md:left-20 h-96 w-96 rounded-full opacity-25 blur-3xl bg-gradient-to-r from-indigo-400 to-purple-600"></div>
 
       <div className="absolute right-10 bottom-20 h-96 w-96 rounded-full opacity-5 blur-3xl bg-gradient-to-r from-purple-400 to-pink-600"></div>
 

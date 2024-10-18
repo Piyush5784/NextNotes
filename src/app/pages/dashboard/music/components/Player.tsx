@@ -1,6 +1,7 @@
 // components/MusicPlayer.tsx
 "use client";
 
+import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useState } from "react";
 
@@ -45,15 +46,21 @@ const Player = () => {
           className="border p-2 w-full mb-4"
           placeholder="Search for a song"
         />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+        <Button
+          type="submit"
+          className=" text-white bg-purple-600 hover:bg-purple-900  p-2 rounded"
+        >
           Search
-        </button>
+        </Button>
       </form>
 
       {songs.length > 0 && (
         <ul className="space-y-4">
           {songs.map((song: any) => (
-            <li key={song.trackId} className="flex items-center space-x-4">
+            <li
+              key={song.trackId}
+              className="flex items-center justify-between"
+            >
               <img
                 src={song.artworkUrl100}
                 alt={song.trackName}

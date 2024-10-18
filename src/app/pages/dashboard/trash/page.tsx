@@ -64,9 +64,11 @@ const Page = () => {
     <div className="min-h-screen py-10 border-primary">
       <div className="container mx-auto px-4">
         <div className="flex justify-between">
-          <h1 className="text-4xl font-bold text-center mb-12">Trash Notes</h1>
+          <h1 className="md:text-4xl text-2xl font-bold text-center mb-12">
+            Trash Notes
+          </h1>
 
-          <div className="flex justify-end">
+          <div className="flex md:justify-end gap-10">
             <Button
               onClick={() => setIsDialogOpen(true)}
               disabled={ids.length === 0}
