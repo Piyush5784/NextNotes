@@ -134,8 +134,8 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
-  // pages: {
-  //   signIn: "/pages/signin",
-  // },
+  pages: {
+    signIn: "/pages/signin",
+  },
   secret: process.env.NEXTAUTH_SECRET || "mysecpassword",
 };
