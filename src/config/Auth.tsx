@@ -1,9 +1,8 @@
+import { Note, User } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 import { Account, AuthOptions, Profile } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
-
-import { Note, User } from "@prisma/client";
 import prisma from "../../prisma";
 export const authOptions: AuthOptions = {
   providers: [
@@ -77,7 +76,7 @@ export const authOptions: AuthOptions = {
           };
         } catch (error) {
           console.error("Error creating user:", error);
-          return null;
+          throw new Error("Something went wrong");
         }
       },
     }),
@@ -136,6 +135,7 @@ export const authOptions: AuthOptions = {
   },
   pages: {
     signIn: "/pages/signin",
+    error: "/pages/signin",
   },
   secret: process.env.NEXTAUTH_SECRET || "mysecpassword",
 };
