@@ -14,6 +14,7 @@ export default function Page() {
     session?.user?.email || ""
   );
 
+  console.log(notes);
   const [refreshing, setRefreshing] = useState(false); // Local state for loading
 
   const handleRefresh = async () => {

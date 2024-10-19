@@ -1,7 +1,7 @@
-import prisma from "../../../../prisma";
+import { NoteSchema } from "@/types/Ztypes";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { NoteSchema } from "@/types/Ztypes";
+import prisma from "../../../../prisma";
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     }
 
     const existingNote = await prisma.note.upsert({
-      where: { noteId: id },
+      where: { noteId: id, user: { username: email } },
       update: {
         time,
         blocks: blocks as Prisma.JsonArray,

@@ -28,7 +28,7 @@ export function ModeToggle() {
       onClick={toggleTheme}
       variant="ghost"
       size="icon"
-      className="relative rounded-full"
+      className="relative rounded-full bg-white text-purple-950 border hover:border-purple-950 hover:bg-primary"
     >
       <motion.div
         key="moon"

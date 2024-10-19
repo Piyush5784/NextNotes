@@ -82,11 +82,11 @@ const Editor = () => {
 
   return (
     <>
-      <div className="flex justify-end items-center p-2 w-[50%] mr-2">
+      <div className="flex justify-end items-center p-2 w-full pr-40">
         <Button
           disabled={isSubmitting}
           variant={"outline"}
-          className="hidden ml-2 md:inline-flex border text-primary border-primary bg-transparent hover:bg-hoverBg hover:border-secondary  hover:text-primary shadow-inner hover:shadow-hoverShadow transition-all duration-300 "
+          className="hidden ml-2 md:inline-flex border dark:text-primary text-purple-950 border-primary bg-transparent hover:bg-hoverBg hover:border-secondary  hover:text-purple-950 shadow-inner hover:shadow-hoverShadow transition-all duration-300 "
           onClick={handleSave}
         >
           Save

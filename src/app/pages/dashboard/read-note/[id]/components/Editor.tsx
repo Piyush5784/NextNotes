@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import useGetAllNotes from "@/hooks/useGetAllNotes";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
 import axios from "axios";
+import clsx from "clsx";
+import { LoaderCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -50,7 +52,7 @@ const Editor = ({ notes, noteId }: { notes: OutputData[]; noteId: string }) => {
     }
     const note = {
       email: user.data?.user?.email,
-      id: Number(noteId),
+      id: Number(!noteId),
       time: editorjsData.time,
       blocks: editorjsData.blocks,
       version: editorjsData.version || "1.0",
@@ -80,10 +82,19 @@ const Editor = ({ notes, noteId }: { notes: OutputData[]; noteId: string }) => {
 
   return (
     <>
-      <div className="flex items-center justify-center">
+      <div className="flex items-end justify-end pr-40">
         {hasChanged && (
-          <Button onClick={handleSave} disabled={savingStatus}>
-            Save
+          <Button
+            onClick={handleSave}
+            className=" ml-2 md:inline-flex border dark:text-primary text-purple-950 border-primary bg-transparent hover:bg-hoverBg hover:border-secondary  hover:text-purple-950 shadow-inner hover:shadow-hoverShadow transition-all duration-300 "
+            disabled={savingStatus}
+          >
+            Save{" "}
+            <LoaderCircle
+              className={clsx("m-2 animate-spin", {
+                hidden: !savingStatus,
+              })}
+            />
           </Button>
         )}
       </div>

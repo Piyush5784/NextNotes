@@ -15,7 +15,7 @@ interface NoteCardProps {
 }
 
 export default function NoteCard({ note }: NoteCardProps) {
-  const { id, time, version, blocks } = note;
+  const { id, time, blocks } = note;
 
   // Convert timestamp to a readable date format
   const date = new Date(Number(time));
@@ -29,63 +29,53 @@ export default function NoteCard({ note }: NoteCardProps) {
     minute: "2-digit",
   });
 
-  // Function to get version color
-  const getVersionColor = (version: string) => {
-    const versionNumber = parseFloat(version);
-    if (versionNumber >= 2) return "bg-green-100 text-green-800";
-    if (versionNumber >= 1) return "bg-blue-100 text-blue-800";
-    return "bg-gray-100 text-gray-800";
-  };
-
   return (
-    <div className={`p-3  `}>
-      <div className="py-6">
-        <div className="flex items-center justify-between mb-4 w-full">
-          <h2 className="text-xl font-semibold  w-52 ">
-            <p
-              className=" leading-relaxed"
-              dangerouslySetInnerHTML={{
-                __html:
-                  blocks[0] !== undefined
-                    ? blocks[0].data.text?.slice(0, 50) + "..." || ""
-                    : "",
-              }}
-            />
+    <div className="p-6 text-white transition-shadow duration-300">
+      <div className="flex items-center justify-between mb-4">
+        <Link href={`/pages/dashboard/read-note/${note.id}`} passHref>
+          <h2 className="text-lg font-semibold leading-relaxed w-40 truncate">
+            {blocks[0]?.data.text ? (
+              <p
+                className="w-full"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    blocks[0] !== undefined
+                      ? blocks[0].data.text?.slice(0, 50) + "..." || ""
+                      : "",
+                }}
+              ></p>
+            ) : (
+              "No content available"
+            )}
           </h2>
-          <div>
-            <NoteMenu noteId={id} />
-          </div>
-        </div>
+        </Link>
+        <NoteMenu noteId={id} />
       </div>
-      <div className="space-y-2 mb-4">
-        <div className="flex items-center text-sm ">
+
+      <div className="space-y-2 text-sm text-gray-200 mb-4">
+        <div className="flex items-center">
           <CalendarIcon className="w-4 h-4 mr-2" />
           {formattedDate}
         </div>
-        <div className="flex items-center text-sm ">
+        <div className="flex items-center">
           <ClockIcon className="w-4 h-4 mr-2" />
           {formattedTime}
         </div>
       </div>
+
       <Link href={`/pages/dashboard/read-note/${note.id}`} passHref>
-        <div className="space-y-3 h-12 overflow-hidden ">
-          {blocks.map(
-            (block, index) =>
-              index != 0 && (
-                <div key={index} className="w-60">
-                  {block.type === "paragraph" && (
-                    <p
-                      className=" leading-relaxed"
-                      dangerouslySetInnerHTML={{
-                        __html: block.data.text
-                          ? block.data.text.slice(0, 50) + "..."
-                          : "",
-                      }}
-                    />
-                  )}
-                </div>
-              )
-          )}
+        <div className="mt-4 space-y-2">
+          {blocks.slice(1).map((block, index) => (
+            <div key={index} className="w-full">
+              {block.type === "paragraph" && (
+                <p className="text-sm leading-relaxed text-gray-300">
+                  {block.data.text
+                    ? block.data.text.slice(0, 50) + "..."
+                    : "No additional content"}
+                </p>
+              )}
+            </div>
+          ))}
         </div>
       </Link>
     </div>

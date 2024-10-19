@@ -24,6 +24,7 @@ import { IoLogoGithub } from "react-icons/io";
 import { IconContext } from "react-icons/lib";
 import { z } from "zod";
 import { FormResponseMessage } from "./component/FormError";
+import toast from "react-hot-toast";
 
 export default function ProfileForm() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -62,6 +63,7 @@ export default function ProfileForm() {
     setSuccess("");
     const res = await signIn("credentials", { ...values, redirect: false });
     if (res?.ok) {
+      toast.success("Successfully logged in");
       setSuccess("User successfully logged in");
     } else if (res?.error) {
       setError("Invalid credentials");
