@@ -48,7 +48,7 @@ export const authOptions: AuthOptions = {
             }
             const notes = existingUser?.Note.map((note: Note) => ({
               ...note,
-              time: note.id.toString(),
+              time: note.noteId.toString(),
             }));
 
             return {

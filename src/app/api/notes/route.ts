@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ message: "Invalid User" }), { status: 400 };
+      return NextResponse.json({ message: "Invalid User" });
     }
 
     const existingNote = await prisma.note.findUnique({
@@ -80,9 +80,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.log(error);
-    return (
-      NextResponse.json({ message: "Error saving the note" }), { status: 400 }
-    );
+    return NextResponse.json({ message: "Error saving the note" });
   }
 }
 
