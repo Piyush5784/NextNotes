@@ -8,7 +8,6 @@ datasource db {
 }
 
 model Note {
-  id        Int      @id @default(autoincrement())
   userId    Int
   noteId    Int      @unique
   time      BigInt

@@ -21,3 +21,8 @@ export const spotifyTracks = atom({
   key: "SpotifyTracksAtom",
   default: [],
 });
+
+export const selectedNote = atom({
+  key: "selectedNoteAtom",
+  default: 0,
+});

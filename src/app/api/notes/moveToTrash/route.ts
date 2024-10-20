@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       );
     }
     await prisma.note.update({
-      where: { id: noteId, user: { username: email } },
+      where: { noteId, user: { username: email } },
       data: { Trash: true },
     });
 
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
 
     // Map response to return relevant fields
     const response = trashedNotes.map((note) => ({
-      id: note.id,
+      id: note.noteId,
       time: note.time.toString(), // Convert BigInt to string
       version: note.version,
       blocks: note.blocks,

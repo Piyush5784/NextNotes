@@ -67,13 +67,19 @@ const BlockDataSchema = z.union([
 // Define the Zod schema for Note
 export const NoteSchema = z.object({
   time: z.number(),
-  id: z.number(),
-  email: z.string(),
+  noteId: z.string(),
+  email: z.string().email(),
   blocks: z.array(BlockDataSchema).optional(),
   version: z.string(),
 });
 
+// email: user.data?.user?.email,
+// id: noteId,
+// time: editorjsData.time,
+// blocks: editorjsData.blocks,
+// version: editorjsData.version || "1.0",
 // Define the validation schema using Zod
+
 export const SubscribeEmailSchema = z.object({
   email: z
     .string()

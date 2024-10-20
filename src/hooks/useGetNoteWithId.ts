@@ -1,22 +1,32 @@
 "use client";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { fetcher } from "./functions";
 
 const useGetAllNotesWithNoteId = (email: string, id: string) => {
-  const { data, error, isLoading, mutate } = useSWR(
-    id && email ? `/api/notes/getAllNotes?email=${email}&id=${id}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false, // Improve performance by not refetching when the window is focused
-      dedupingInterval: 60000, // Prevent multiple requests within a short time
-      shouldRetryOnError: true, // Retry on failure
+  const key =
+    id && email ? `/api/notes/getAllNotes?email=${email}&id=${id}` : null;
+
+  const { data, error, isLoading } = useSWR(key, fetcher, {
+    revalidateOnFocus: false,
+    shouldRetryOnError: true,
+    refreshInterval: 60000,
+  });
+
+  // Mutate function to manually revalidate the data
+  const refreshNotes = async () => {
+    if (key) {
+      await mutate(key, async () => {
+        const response = await fetcher(key);
+        return response;
+      });
     }
-  );
+  };
 
   return {
     notes: data ? data.notes : [],
     isLoading,
     isError: !!error,
+    refreshNotes, // Expose the mutate function
   };
 };
 

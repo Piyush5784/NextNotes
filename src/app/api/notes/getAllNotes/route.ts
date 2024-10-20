@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
     });
 
     const notes = user?.Note.map((note) => ({
-      id: note.id,
+      id: note.noteId,
       time: note.time.toString(), // Ensure BigInt is properly formatted as a string
       version: note.version,
       blocks: note.blocks,

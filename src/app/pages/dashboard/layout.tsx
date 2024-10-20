@@ -2,7 +2,6 @@
 import { useSession } from "next-auth/react";
 import SideNav from "./components/Sidebar";
 import Skeleton from "./components/Skeleton";
-import Loader from "./components/Loader";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();

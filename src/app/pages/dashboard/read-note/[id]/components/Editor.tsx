@@ -2,6 +2,7 @@
 import { editorConfig } from "@/components/editor/editorjs.config";
 import { Button } from "@/components/ui/button";
 import useGetAllNotes from "@/hooks/useGetAllNotes";
+import { NoteSchema } from "@/types/Ztypes";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
 import axios from "axios";
 import clsx from "clsx";
@@ -9,10 +10,12 @@ import { LoaderCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+
 const Editor = ({ notes, noteId }: { notes: OutputData[]; noteId: string }) => {
   const ejInstance = useRef();
   const user = useSession();
   const { mutate } = useGetAllNotes(user.data?.user?.email || "");
+
   const default_Data = notes[0];
   const [editorjsData, setEditorjsData] = useState<OutputData>(default_Data);
   const [initialData, setInitialData] = useState<OutputData>(default_Data); // Store the initial data
@@ -52,13 +55,19 @@ const Editor = ({ notes, noteId }: { notes: OutputData[]; noteId: string }) => {
     }
     const note = {
       email: user.data?.user?.email,
-      id: Number(!noteId),
+      noteId,
       time: editorjsData.time,
       blocks: editorjsData.blocks,
       version: editorjsData.version || "1.0",
     };
 
+    const format = NoteSchema.safeParse(note);
+
     try {
+      if (!format.success) {
+        return toast.error("Invalid data");
+      }
+
       setSavingStatus(true);
       await toast.promise(axios.post(`/api/notes`, note), {
         loading: "Saving note...",
@@ -83,20 +92,23 @@ const Editor = ({ notes, noteId }: { notes: OutputData[]; noteId: string }) => {
   return (
     <>
       <div className="flex items-end justify-end pr-40">
-        {hasChanged && (
-          <Button
-            onClick={handleSave}
-            className=" ml-2 md:inline-flex border dark:text-primary text-purple-950 border-primary bg-transparent hover:bg-hoverBg hover:border-secondary  hover:text-purple-950 shadow-inner hover:shadow-hoverShadow transition-all duration-300 "
-            disabled={savingStatus}
-          >
-            Save{" "}
-            <LoaderCircle
-              className={clsx("m-2 animate-spin", {
-                hidden: !savingStatus,
-              })}
-            />
-          </Button>
-        )}
+        <Button
+          onClick={handleSave}
+          className={clsx(
+            " ml-2 md:inline-flex border dark:text-primary text-purple-950 border-primary bg-transparent hover:bg-hoverBg hover:border-secondary  hover:text-purple-950 shadow-inner hover:shadow-hoverShadow transition-all duration-300 ",
+            {
+              "hover:cursor-not-allowed": !hasChanged,
+            }
+          )}
+          disabled={savingStatus || !hasChanged}
+        >
+          Save{" "}
+          <LoaderCircle
+            className={clsx("m-2 animate-spin", {
+              hidden: !savingStatus,
+            })}
+          />
+        </Button>
       </div>
       <div id="editorjs"></div>
     </>

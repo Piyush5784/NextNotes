@@ -2,8 +2,10 @@
 import useGetAllNotesWithNoteId from "@/hooks/useGetNoteWithId";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
-import { useParams } from "next/navigation"; // for getting the params in Next.js 13+
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
+
 let Editor = dynamic(
   () => import("@/app/pages/dashboard/read-note/[id]/components/Editor"),
   {
@@ -12,28 +14,40 @@ let Editor = dynamic(
 );
 
 const NotePage = () => {
-  const params = useParams(); // Get the dynamic route params
-  const { data: session } = useSession();
+  const params = useParams();
 
-  let noteId = params?.id; // Capture the noteId from the URL
-  if (!noteId) {
-    return <p>Invalid Note Id</p>; // Display an error if noteId is not available
-  }
-  if (Array.isArray(noteId)) {
-    noteId = noteId[0]; // If noteId is an array, take the first element
-  }
-  const { notes, isError, isLoading } = useGetAllNotesWithNoteId(
+  const { data: session } = useSession();
+  const [noteId, setNoteId] = useState<string>(
+    Array.isArray(params?.id) ? params?.id[0] : params?.id
+  );
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setNoteId(Array.isArray(params?.id) ? params?.id[0] : params?.id);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, [params?.id]);
+
+  const { notes, isError, isLoading, refreshNotes } = useGetAllNotesWithNoteId(
     session?.user?.email!,
     noteId
   );
-  if (isLoading) {
+
+  if (!noteId) {
+    return <p>Invalid Note Id</p>;
+  }
+
+  if (isLoading || loading) {
     return <Loader />;
   }
-  if (notes) {
+
+  if (notes.length > 0) {
     return <Editor notes={notes} noteId={noteId} />;
   }
 
-  // Pass the noteId to the Editor component
+  return null; // Handle the case where no notes are available
 };
 
 export default NotePage;

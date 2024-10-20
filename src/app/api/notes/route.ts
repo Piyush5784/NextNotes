@@ -15,40 +15,74 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const { email, id, time, blocks, version } = format.data;
+    const { email, noteId, time, blocks, version } = format.data;
+    const id = Number(noteId);
 
     const user = await prisma.user.findUnique({
       where: { username: email },
     });
 
     if (!user) {
-      return NextResponse.json({ message: "Invalid User" });
+      return NextResponse.json({ message: "Invalid User" }), { status: 400 };
     }
 
-    const existingNote = await prisma.note.upsert({
-      where: { noteId: id, user: { username: email } },
-      update: {
-        time,
-        blocks: blocks as Prisma.JsonArray,
-        version,
-        userId: user.id,
-      },
-      create: {
-        time,
+    const existingNote = await prisma.note.findUnique({
+      where: {
         noteId: id,
+      },
+    });
+
+    if (existingNote) {
+      await prisma.note.update({
+        where: {
+          noteId: id,
+        },
+        data: {
+          time,
+          blocks: blocks as Prisma.JsonArray,
+          version,
+          userId: user.id,
+        },
+      });
+      return NextResponse.json({ message: "Note successfully updated" });
+    }
+
+    await prisma.note.create({
+      data: {
+        time,
         blocks: blocks as Prisma.JsonArray,
         version,
+        noteId: id,
         userId: user.id,
       },
     });
 
+    // const existingNote = await prisma.note.upsert({
+    //   where: { noteId: id, user: { username: email } },
+    //   update: {
+    //     time,
+    //     blocks: blocks as Prisma.JsonArray,
+    //     version,
+    //     noteId: id,
+    //     userId: user.id,
+    //   },
+    //   create: {
+    //     time,
+    //     noteId: id,
+    //     blocks: blocks as Prisma.JsonArray,
+    //     version,
+    //     userId: user.id,
+    //   },
+    // });
+
     return NextResponse.json({
-      message: existingNote
-        ? "Note successfully updated"
-        : "Note saved successfully",
+      message: "Note saved successfully",
     });
   } catch (error) {
-    return NextResponse.json({ message: "Error saving the note" });
+    console.log(error);
+    return (
+      NextResponse.json({ message: "Error saving the note" }), { status: 400 }
+    );
   }
 }
 
@@ -81,7 +115,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       message: "Note fetched successfully",
       note: {
-        id: note.id,
+        id: noteId,
         time: note.time.toString(),
         version: note.version,
         blocks: note.blocks,

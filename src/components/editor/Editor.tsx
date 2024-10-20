@@ -1,5 +1,6 @@
 "use client";
 import useGetAllNotes from "@/hooks/useGetAllNotes";
+import { NoteSchema } from "@/types/Ztypes";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
 import axios from "axios";
 import clsx from "clsx";
@@ -65,12 +66,18 @@ const Editor = () => {
   const handleSave = async () => {
     const note = {
       email: session?.user?.email,
-      id: notes.length + 1,
+      noteId: String(notes.length + 1),
       time: editorjsData.time,
       blocks: editorjsData.blocks,
       version: editorjsData.version || "1.0",
     };
+    const format = NoteSchema.safeParse(note);
+    if (!format.success) {
+      return toast.error("Invalid data");
+    }
+
     setIsSubmitting(true);
+    const res = await axios.post(`/api/notes`, note);
     await toast.promise(axios.post(`/api/notes`, note), {
       loading: "Saving note...",
       success: "Note successfully saved",
@@ -82,11 +89,11 @@ const Editor = () => {
 
   return (
     <>
-      <div className="flex justify-end items-center p-2 w-full pr-40">
+      <div className="flex justify-end items-center p-2 w-full md:px-24">
         <Button
           disabled={isSubmitting}
           variant={"outline"}
-          className="hidden ml-2 md:inline-flex border dark:text-primary text-purple-950 border-primary bg-transparent hover:bg-hoverBg hover:border-secondary  hover:text-purple-950 shadow-inner hover:shadow-hoverShadow transition-all duration-300 "
+          className=" ml-2 inline-flex border dark:text-primary text-purple-950 border-primary bg-transparent hover:bg-hoverBg hover:border-secondary  hover:text-purple-950 shadow-inner hover:shadow-hoverShadow transition-all duration-300 "
           onClick={handleSave}
         >
           Save

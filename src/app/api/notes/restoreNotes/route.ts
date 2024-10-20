@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         user: {
           username: email,
         },
-        id: {
+        noteId: {
           in: ids,
         },
       },

@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     await prisma.note.deleteMany({
       where: {
         userId: user.id, // Use the fetched userId
-        id: {
+        noteId: {
           in: idsArray,
         },
       },
