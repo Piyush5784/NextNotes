@@ -89,10 +89,10 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      const res: AxiosResponse = await axios.post(
-        "/api/auth/user/signup",
-        values
-      );
+      const res: AxiosResponse = await axios.post("/api/auth/user/signup", {
+        ...values,
+        email: values.email.toLowerCase(),
+      });
       if (res.data.success) {
         setResponse({ success: true, message: res.data.message });
         toast.success("Email successfully sent to your email.");

@@ -26,6 +26,7 @@ const Editor = ({
   const [hasChanged, setHasChanged] = useState(false);
 
   useEffect(() => {
+    // Only initialize the editor if it hasn't been initialized yet
     if (!ejInstance.current) {
       initEditor();
     }
@@ -40,6 +41,7 @@ const Editor = ({
 
   const initEditor = () => {
     const editor = new EditorJS({
+      holder: "editorjs", // Make sure to set the holder to the correct element ID
       onReady: () => {
         console.log("editor is ready");
       },
@@ -52,6 +54,8 @@ const Editor = ({
       },
       ...editorConfig,
     });
+
+    ejInstance.current = editor; // Assign the editor instance to the ref
   };
 
   return (
