@@ -18,7 +18,7 @@ const DeleteNote = ({ id }: { id: number }) => {
     await toast.promise(
       axios.post(`${BaseUrl}/api/notes/moveToTrash`, {
         email: session?.user?.email,
-        noteId: id,
+        noteId: Number(id),
       }),
       {
         loading: "Moving note to trash...",

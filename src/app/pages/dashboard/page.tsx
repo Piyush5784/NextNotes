@@ -11,9 +11,6 @@ export default function Page() {
   const { notes, isLoading, isError, mutate } = useGetAllNotes(
     session?.user?.email || ""
   );
-
-  console.log(notes);
-  console.log(isLoading, isError);
   const [refreshing, setRefreshing] = useState(false); // Local state for loading
 
   const handleRefresh = async () => {
