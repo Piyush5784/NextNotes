@@ -1,5 +1,5 @@
 "use client";
-import Appbar from "@/components/custom/Appbar";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,8 +13,8 @@ import { Input } from "@/components/ui/input";
 import { LoginFormSchema } from "@/schema/zodValidationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
+import { Link } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MouseEvent, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -70,7 +70,6 @@ export default function ProfileForm() {
 
   return (
     <>
-      <Appbar />
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -167,9 +166,13 @@ export default function ProfileForm() {
 
           <div className="flex gap-2 p-5 justify-center text-center items-center">
             Don't have an account?{" "}
-            <Link href={"/pages/signup"} className="hover:underline">
+            <Button
+              onClick={() => router.push("/pages/signup")}
+              variant={"link"}
+              className="hover:underline text-black dark:text-white"
+            >
               Register now
-            </Link>
+            </Button>
           </div>
 
           {/* <div className="my-6 flex items-center justify-between">
