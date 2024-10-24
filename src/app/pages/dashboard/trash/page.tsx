@@ -12,7 +12,6 @@ import CustomDialog from "../components/DeleteNoteDialog";
 const Page = () => {
   const { data: session } = useSession();
   const [refreshing, setRefreshing] = useState(false);
-  console.log(session);
   const { notes, mutate } = useGetAllNotes(session?.user?.email || "");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 

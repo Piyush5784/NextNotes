@@ -5,7 +5,6 @@ export async function POST(req: NextRequest) {
   try {
     const { idsArray, email }: { idsArray: number[]; email: string } =
       await req.json();
-    // Fetch the userId based on the email
     const user = await prisma.user.findUnique({
       where: {
         email,
@@ -22,7 +21,7 @@ export async function POST(req: NextRequest) {
     // Use the userId to delete the notes
     await prisma.note.deleteMany({
       where: {
-        userId: user.id, // Use the fetched userId
+        userId: Number(user.id), // Use the fetched userId
         noteId: {
           in: idsArray,
         },
