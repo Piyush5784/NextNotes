@@ -26,7 +26,7 @@ const Page = () => {
 
   const handlerDeleteALLNotes = async (id: number | number[]) => {
     await toast.promise(
-      axios.post(`${BaseUrl}/api/notes/deleteAllNotes`, {
+      axios.post(`/api/notes/deleteAllNotes`, {
         email: session?.user?.email,
         idsArray: Array.isArray(id) ? id : [id],
       }),
