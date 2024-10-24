@@ -5,6 +5,7 @@ export async function POST(req: NextRequest) {
   try {
     const { noteId, email } = await req.json();
 
+    const numNoteId = Number(noteId);
     if (!noteId || !email) {
       return NextResponse.json(
         {
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
       );
     }
     await prisma.note.update({
-      where: { noteId, user: { email } },
+      where: { noteId: numNoteId, user: { email } },
       data: { Trash: true },
     });
 
@@ -42,7 +43,7 @@ export async function GET(req: NextRequest) {
     const trashedNotes = await prisma.note.findMany({
       where: {
         user: {
-          username: email,
+          email,
         },
         Trash: true, // Fetch only trashed notes
       },
