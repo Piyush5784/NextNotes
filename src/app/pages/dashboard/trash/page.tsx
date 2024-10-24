@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import useGetAllNotes from "@/hooks/useGetAllNotes";
-import { BaseUrl, Note } from "@/types/TsTypes";
+import { Note } from "@/types/TsTypes";
 import axios from "axios";
 import { RotateCcw, Trash } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -41,7 +41,7 @@ const Page = () => {
 
   const handlerRestoreNote = async (id: number | number[]) => {
     await toast.promise(
-      axios.post(`${BaseUrl}/api/notes/restoreNotes`, {
+      axios.post(`/api/notes/restoreNotes`, {
         email: session?.user?.email,
         idsArray: Array.isArray(id) ? id : [id],
       }),

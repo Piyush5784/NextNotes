@@ -1,6 +1,5 @@
 "use client";
 import useGetAllNotes from "@/hooks/useGetAllNotes";
-import { BaseUrl } from "@/types/TsTypes";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -16,9 +15,9 @@ const DeleteNote = ({ id }: { id: number }) => {
     }
 
     await toast.promise(
-      axios.post(`${BaseUrl}/api/notes/moveToTrash`, {
+      axios.post(`/api/notes/moveToTrash`, {
         email: session?.user?.email,
-        noteId: id,
+        noteId: Number(id),
       }),
       {
         loading: "Moving note to trash...",

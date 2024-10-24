@@ -1,5 +1,4 @@
 "use client";
-import { BaseUrl } from "@/types/TsTypes";
 import { SubscribeEmailSchema } from "@/types/Ztypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -31,7 +30,7 @@ const SubscribeEmail = () => {
     try {
       setSubmitting(true);
       await toast.promise(
-        axios.post(`${BaseUrl}/api/subscribeEmail`, {
+        axios.post(`/api/subscribeEmail`, {
           email: data.email,
         }),
         {

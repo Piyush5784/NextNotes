@@ -1,6 +1,5 @@
 // types.ts
 
-export const BaseUrl = "http://localhost:3000";
 export interface BlockData {
   id: string; // Unique ID for each block
   type: string; // Type of block (paragraph, header, etc.)
