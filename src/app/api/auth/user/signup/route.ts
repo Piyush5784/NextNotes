@@ -7,7 +7,8 @@ export async function POST(req: NextRequest) {
   try {
     const { username, email, password } = await req.json();
 
-    // Check for an existing user with the same email and username
+    const newEmail = email.toLowerCase();
+
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [{ email }, { username }],
@@ -31,6 +32,7 @@ export async function POST(req: NextRequest) {
             id: existingUser.id, // Use unique ID for updating
           },
           data: {
+            username,
             password: hashedPassword,
             verifyCode,
             verifyCodeExpiry: expiryDate,
@@ -62,7 +64,8 @@ export async function POST(req: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const verifyCode = Math.floor(Math.random() * 1000000);
     const expiryDate = new Date(Date.now() + 5 * 60 * 1000); // Set expiry to 5 minutes
-    const newEmail = email.toLowerCase();
+    // newEmail is already declared above, no need to redeclare it here
+
     await prisma.user.create({
       data: {
         username,
@@ -75,7 +78,7 @@ export async function POST(req: NextRequest) {
     });
 
     const emailResponse = await sendVerificationEmail(
-      email,
+      newEmail,
       username,
       verifyCode
     );

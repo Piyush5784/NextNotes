@@ -1,4 +1,5 @@
 "use client";
+
 import Appbar from "@/components/custom/Appbar";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +19,8 @@ import { OtpValidationSchema } from "@/schema/zodValidationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosResponse } from "axios";
 import { motion } from "framer-motion";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -74,7 +76,6 @@ const VerifyCodePage = () => {
   };
   return (
     <>
-      <Appbar />
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -143,7 +144,7 @@ const VerifyCodePage = () => {
                 <Button
                   type="submit"
                   className=" w-full px-4 py-2 bg-purple-600 text-white rounded-md shadow-md hover:bg-purple-700 transition-all duration-300"
-                  disabled={loading}
+                  disabled={loading || response.success}
                 >
                   {loading ? (
                     <AiOutlineLoading3Quarters className="animate-spin mx-2" />

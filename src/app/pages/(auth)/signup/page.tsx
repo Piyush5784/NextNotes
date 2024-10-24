@@ -1,5 +1,5 @@
 "use client";
-import Appbar from "@/components/custom/Appbar";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -10,13 +10,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import useDebounce from "@/hooks/useDebounce";
 import { RegisterFormSchema } from "@/schema/zodValidationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosResponse } from "axios";
 import { motion } from "framer-motion";
-import { Link } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -39,13 +39,54 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [response, setResponse] = useState({ success: false, message: "" });
   const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState("");
+  const debouncedUsername = useDebounce(username, 2000);
+  const [usernameResponse, setUsernameResponse] = useState("");
+  const [usernameLoading, setUsernameLoading] = useState(false);
+  const [usernameValid, setUsernameValid] = useState(false);
 
   const handlePasswordShow = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    return setShowPassword((p) => !p);
+    setShowPassword((p) => !p);
   };
 
+  useEffect(() => {
+    if (debouncedUsername) {
+      setUsernameLoading(true);
+      const checkUsername = async () => {
+        try {
+          const res: AxiosResponse = await axios.post(
+            "/api/auth/user/checkUsername",
+            { username: debouncedUsername }
+          );
+          if (res.status === 200) {
+            setUsernameResponse(res.data.message);
+            setUsernameValid(res.data.success); // Assuming the API returns a valid flag
+          } else {
+            setUsernameResponse("Unexpected response from server.");
+            setUsernameValid(false);
+          }
+        } catch (error) {
+          setUsernameResponse("Error checking username.");
+          setUsernameValid(false);
+        } finally {
+          setUsernameLoading(false);
+        }
+      };
+
+      checkUsername();
+    } else {
+      setUsernameResponse(""); // Clear response if username is empty
+      setUsernameValid(false); // Reset username validity
+    }
+  }, [debouncedUsername]);
+
   const onSubmit = async (values: z.infer<typeof RegisterFormSchema>) => {
+    if (!usernameValid) {
+      toast.error("Please enter a valid username.");
+      return;
+    }
+
     setLoading(true);
     try {
       const res: AxiosResponse = await axios.post(
@@ -53,8 +94,8 @@ export default function RegisterPage() {
         values
       );
       if (res.data.success) {
-        setResponse({ success: res.data.success, message: res.data.message });
-        toast.success("Email successfully send to mail Id");
+        setResponse({ success: true, message: res.data.message });
+        toast.success("Email successfully sent to your email.");
 
         let countdown = 3;
 
@@ -73,14 +114,14 @@ export default function RegisterPage() {
         setResponse({ success: false, message: res.data.message });
       }
     } catch (error) {
-      setResponse({ success: false, message: "Unexpected error" });
+      setResponse({ success: false, message: "Unexpected error occurred." });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
     <>
-      <Appbar />
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -92,7 +133,7 @@ export default function RegisterPage() {
             Register a new account
           </h1>
           <p className="text-center text-gray-500 dark:text-gray-400 mb-8">
-            Enter your username,email and password below.
+            Enter your username, email, and password below.
           </p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -105,12 +146,29 @@ export default function RegisterPage() {
                       Username
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Enter Username"
-                        {...field}
-                        type="text"
-                        className="block w-full px-4 py-2 text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                      />
+                      <div>
+                        <Input
+                          placeholder="Enter Username"
+                          {...field}
+                          onChange={(e) => {
+                            setUsername(e.target.value);
+                            field.onChange(e);
+                          }}
+                          type="text"
+                          className="block w-full px-4 py-2 text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                        />
+                        {usernameLoading ? (
+                          <AiOutlineLoading3Quarters className="animate-spin mx-2" />
+                        ) : (
+                          <p
+                            className={`text-sm ${
+                              usernameValid ? "text-green-500" : "text-red-500"
+                            }`}
+                          >
+                            {usernameResponse}
+                          </p>
+                        )}
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -150,7 +208,7 @@ export default function RegisterPage() {
                       <div className="relative">
                         <Input
                           id="password"
-                          type={`${showPassword ? "text" : "password"}`}
+                          type={showPassword ? "text" : "password"}
                           placeholder="Enter your password"
                           autoComplete="password"
                           className="block w-full px-4 py-2 text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
@@ -160,7 +218,7 @@ export default function RegisterPage() {
                           variant="ghost"
                           size="icon"
                           className="absolute top-1/2 right-3 transform -translate-y-1/2"
-                          onClick={(e) => handlePasswordShow(e)}
+                          onClick={handlePasswordShow}
                         >
                           {showPassword ? (
                             <FaEyeSlash className="h-5 w-5 text-gray-600 dark:text-gray-300" />
@@ -169,7 +227,7 @@ export default function RegisterPage() {
                           )}
                         </Button>
                       </div>
-                    </FormControl>{" "}
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -185,7 +243,7 @@ export default function RegisterPage() {
                 <Button
                   type="submit"
                   className="w-full px-4 py-2 bg-purple-600 text-white rounded-md shadow-md hover:bg-purple-700 transition-all duration-300"
-                  disabled={loading}
+                  disabled={loading || response.success}
                 >
                   {loading ? (
                     <AiOutlineLoading3Quarters className="animate-spin mx-2" />
@@ -199,9 +257,13 @@ export default function RegisterPage() {
 
           <div className="flex gap-2 p-5 justify-center text-center items-center">
             Already have an account?{" "}
-            <Link href={"/pages/signup"} className="hover:underline">
-              Register now
-            </Link>
+            <Button
+              onClick={() => router.push("/pages/signin")}
+              variant={"link"}
+              className="hover:underline text-black dark:text-white"
+            >
+              Login now
+            </Button>
           </div>
         </div>
       </motion.div>
