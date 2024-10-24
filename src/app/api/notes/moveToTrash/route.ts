@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       );
     }
     await prisma.note.update({
-      where: { noteId, user: { username: email } },
+      where: { noteId, user: { email } },
       data: { Trash: true },
     });
 

@@ -1,112 +1,40 @@
-"use client";
-import useGetAllNotes from "@/hooks/useGetAllNotes";
-import { NoteSchema } from "@/types/Ztypes";
+import React, { FC, useEffect, useRef } from "react";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
-import axios from "axios";
-import clsx from "clsx";
-import { LoaderCircle } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
-import { Button } from "../ui/button";
 import { editorConfig } from "./editorjs.config";
 
-const Editor = () => {
-  const { data: session } = useSession();
-  const { notes, mutate } = useGetAllNotes(session?.user?.email || "");
-  const ejInstance = useRef();
-  const router = useRouter();
+export type EditorProps = {
+  data: OutputData;
+  onChange: (data: OutputData) => void;
+};
 
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+const Editor: FC<EditorProps> = ({ data, onChange }) => {
+  const editorInstance = useRef<EditorJS | null>(null);
+  const editorContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const default_Data = {
-    time: new Date().getTime(),
-    blocks: [
-      {
-        id: "oUq2g_tl8y",
-        type: "paragraph",
-        data: {
-          text: "<b>My Notes</b>",
-          level: 1,
-        },
-      },
-    ],
-  };
-
-  const [editorjsData, setEditorjsData] = useState<OutputData>(default_Data);
   useEffect(() => {
-    if (ejInstance.current === null) {
-      initEditor();
+    if (!editorInstance.current) {
+      editorInstance.current = new EditorJS({
+        ...editorConfig,
+        data: data,
+        onChange: async (api, event: any) => {
+          if (onChange) {
+            const savedData = await api.saver.save();
+
+            onChange(savedData);
+          }
+        },
+      });
     }
 
     return () => {
-      //@ts-ignore
-      ejInstance?.current?.destroy();
-      //@ts-ignore
-      ejInstance.current = null;
+      if (editorInstance.current && editorInstance.current.destroy) {
+        editorInstance.current.destroy();
+        editorInstance.current = null;
+      }
     };
   }, []);
 
-  const initEditor = () => {
-    const editor = new EditorJS({
-      onReady: () => {
-        console.log("editor is ready");
-      },
-      data: default_Data,
-      autofocus: true,
-      onChange: async () => {
-        let content = await editor.saver.save();
-        setEditorjsData(content);
-      },
-      ...editorConfig,
-    });
-  };
-
-  const handleSave = async () => {
-    const note = {
-      email: session?.user?.email,
-      noteId: String(notes.length + 1),
-      time: editorjsData.time,
-      blocks: editorjsData.blocks,
-      version: editorjsData.version || "1.0",
-    };
-    const format = NoteSchema.safeParse(note);
-    if (!format.success) {
-      return toast.error("Invalid data");
-    }
-
-    setIsSubmitting(true);
-    const res = await axios.post(`/api/notes`, note);
-    await toast.promise(axios.post(`/api/notes`, note), {
-      loading: "Saving note...",
-      success: "Note successfully saved",
-      error: "Failed to save note.",
-    });
-    setIsSubmitting(false);
-    router.push("/pages/dashboard");
-  };
-
-  return (
-    <>
-      <div className="flex justify-end items-center p-2 w-full md:px-24">
-        <Button
-          disabled={isSubmitting}
-          variant={"outline"}
-          className=" ml-2 inline-flex border dark:text-primary text-purple-950 border-primary bg-transparent hover:bg-hoverBg hover:border-secondary  hover:text-purple-950 shadow-inner hover:shadow-hoverShadow transition-all duration-300 "
-          onClick={handleSave}
-        >
-          Save
-          <LoaderCircle
-            className={clsx("m-2 animate-spin", {
-              hidden: !isSubmitting,
-            })}
-          />
-        </Button>
-      </div>
-      <div id="editorjs"></div>
-    </>
-  );
+  return <div id="editorjs" ref={editorContainerRef}></div>;
 };
 
 export default Editor;

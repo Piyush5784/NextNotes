@@ -39,10 +39,3 @@ export type UserWithNotes = {
   image?: string | null; // User's image
   notes?: Note[]; // User's notes
 };
-
-// Extend the Session interface in next-auth
-declare module "next-auth" {
-  interface Session {
-    user?: UserWithNotes; // Custom user object with notes
-  }
-}

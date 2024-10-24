@@ -3,14 +3,12 @@ import useSWR, { mutate } from "swr";
 import { fetcher } from "./functions";
 
 const useGetAllNotes = (email?: string) => {
-  const username = email;
-
   const { data, error, isLoading } = useSWR(
-    username ? `/api/notes/getAllNotes?email=${username}` : null,
+    email ? `/api/notes/getAllNotes?email=${email}` : null,
     fetcher,
     {
-      revalidateOnFocus: false,
-      refreshInterval: 60000,
+      // revalidateOnFocus: false,
+      // refreshInterval: 60000,
       shouldRetryOnError: true, // Retry on failure
     }
   );

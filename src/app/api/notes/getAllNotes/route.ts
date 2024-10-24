@@ -3,7 +3,7 @@ import prisma from "../../../../../prisma";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const email = searchParams.get("email");
+  const email = searchParams.get("email")?.toLowerCase();
 
   if (!email) {
     return NextResponse.json(
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const user = await prisma.user.findUnique({
-      where: { username: email },
+      where: { email },
       include: { Note: true }, // Include the notes associated with the user
     });
 
@@ -25,9 +25,10 @@ export async function GET(req: NextRequest) {
       blocks: note.blocks,
       Trash: note.Trash,
     }));
+    const allNotes = notes ? notes : [];
 
     return NextResponse.json(
-      { message: "Notes fetched successfully", notes },
+      { message: "Notes fetched successfully", notes: allNotes },
       { status: 200 }
     );
   } catch (error) {

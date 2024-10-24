@@ -10,25 +10,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { formSchema } from "@/schema/zodValidationSchema";
+import { LoginFormSchema } from "@/schema/zodValidationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MouseEvent, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import { IoLogoGithub } from "react-icons/io";
-import { IconContext } from "react-icons/lib";
 import { z } from "zod";
 import { FormResponseMessage } from "./component/FormError";
-import toast from "react-hot-toast";
 
 export default function ProfileForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof LoginFormSchema>>({
+    resolver: zodResolver(LoginFormSchema),
     mode: "onChange",
     defaultValues: {
       email: "",
@@ -36,37 +34,34 @@ export default function ProfileForm() {
     },
   });
 
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { status } = useSession();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
 
-  const router = useRouter();
-  if (status == "authenticated") {
-    return router.push("/pages/dashboard");
-  }
-
-  function googleSignInHandler(e: MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    return signIn("google");
-  }
-
   function handlePasswordShow(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     return setShowPassword((p) => !p);
   }
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
     setLoading(true);
     setError("");
     setSuccess("");
-    const res = await signIn("credentials", { ...values, redirect: false });
-    if (res?.ok) {
-      toast.success("Successfully logged in");
-      setSuccess("User successfully logged in");
-    } else if (res?.error) {
-      setError("Invalid credentials");
+    try {
+      const res = await signIn("credentials", { ...values, redirect: false });
+
+      if (res?.ok) {
+        toast.success("User Successfully logged in");
+        setSuccess("User successfully logged in");
+        router.push("/pages/dashboard");
+      } else if (res?.error) {
+        setError(res.error);
+      }
+    } catch (error) {
+      setError("Unexpected error occured");
     }
 
     form.reset();
@@ -170,31 +165,38 @@ export default function ProfileForm() {
             </form>
           </Form>
 
-          <div className="my-6 flex items-center justify-between">
+          <div className="flex gap-2 p-5 justify-center text-center items-center">
+            Don't have an account?{" "}
+            <Link href={"/pages/signup"} className="hover:underline">
+              Register now
+            </Link>
+          </div>
+
+          {/* <div className="my-6 flex items-center justify-between">
             <div className="w-full h-px bg-gray-300"></div>
             <span className="mx-4 text-gray-500 dark:text-gray-400">or</span>
             <div className="w-full h-px bg-gray-300"></div>
-          </div>
+          </div> */}
 
-          <div className="grid grid-cols-2 gap-4">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          {/* <div className="grid grid-cols-2 gap-4"> */}
+          {/* <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button className="w-full flex items-center justify-center bg-white text-gray-900 dark:bg-gray-700 dark:text-white border border-gray-300 dark:border-gray-700 rounded-md py-2 shadow-md hover:bg-gray-100 dark:hover:bg-gray-600">
                 <IconContext.Provider value={{ size: "20" }}>
                   <FcGoogle className="mr-2" />
                 </IconContext.Provider>
                 Google
               </Button>
-            </motion.div>
+            </motion.div> */}
 
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          {/* <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button className="w-full flex items-center justify-center bg-white text-gray-900 dark:bg-gray-700 dark:text-white border border-gray-300 dark:border-gray-700 rounded-md py-2 shadow-md hover:bg-gray-100 dark:hover:bg-gray-600">
                 <IconContext.Provider value={{ size: "20" }}>
                   <IoLogoGithub className="mr-2" />
                 </IconContext.Provider>
                 GitHub
               </Button>
-            </motion.div>
-          </div>
+            </motion.div> */}
+          {/* </div> */}
         </div>
       </motion.div>
     </>

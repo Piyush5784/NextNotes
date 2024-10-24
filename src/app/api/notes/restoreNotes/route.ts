@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     await prisma.note.updateMany({
       where: {
         user: {
-          username: email,
+          email,
         },
         noteId: {
           in: ids,

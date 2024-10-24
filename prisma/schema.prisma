@@ -18,15 +18,21 @@ model Note {
   user      User     @relation(fields: [userId], references: [id])
   Trash     Boolean  @default(false)
   Favorite  Boolean  @default(false)
+
   // Optional: Index on time for better query performance
   @@index([time])
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  username String   @unique
-  password String
-  Note     Note[]
+  id               Int      @id @default(autoincrement())
+  email            String   @unique
+  username         String   @unique
+  password         String
+  isVerified       Boolean  @default(false)
+  verifyCode       Int
+  verifyCodeExpiry DateTime
+  Note             Note[]
+
   // Optional: Cascade delete behavior for Notes and Trash when user is deleted
   @@index([username]) // Index on username for faster lookup
 }
