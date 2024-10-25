@@ -2,6 +2,8 @@ import { NoteSchema } from "@/types/Ztypes";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/config/Auth";
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,7 +17,16 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const { email, noteId, time, blocks, version } = format.data;
+    const session = await getServerSession(authOptions);
+    const email = session?.user.email;
+
+    if (!email) {
+      return NextResponse.json({
+        success: false,
+        message: "UnAuthorized user",
+      });
+    }
+    const { noteId, time, blocks, version } = format.data;
     const id = Number(noteId);
 
     const user = await prisma.user.findUnique({

@@ -1,18 +1,19 @@
+import { authOptions } from "@/config/Auth";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../prisma";
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const email = searchParams.get("email")?.toLowerCase();
-
-  if (!email) {
-    return NextResponse.json(
-      { message: "Email is required to fetch notes" },
-      { status: 400 }
-    );
-  }
-
   try {
+    const session = await getServerSession(authOptions);
+    const email = session?.user.email;
+
+    if (!email) {
+      return NextResponse.json({
+        success: false,
+        message: "UnAuthorized user",
+      });
+    }
     const user = await prisma.user.findUnique({
       where: { email },
       include: { Note: true }, // Include the notes associated with the user

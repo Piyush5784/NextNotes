@@ -36,7 +36,7 @@ export default function ProfileForm() {
 
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { status } = useSession();
+  const { status, data: session } = useSession();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
@@ -66,6 +66,10 @@ export default function ProfileForm() {
 
     form.reset();
     setLoading(false);
+  }
+
+  if (status == "authenticated" && session) {
+    return router.push("/pages/dashboard");
   }
 
   return (
