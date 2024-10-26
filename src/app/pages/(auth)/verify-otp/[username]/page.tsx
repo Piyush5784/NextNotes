@@ -48,7 +48,6 @@ const VerifyCodePage = () => {
         username,
         code: values.otp,
       });
-      console.log(res);
       if (res.data.success) {
         setResponse({ success: res.data.success, message: res.data.message });
         let countdown = 3;

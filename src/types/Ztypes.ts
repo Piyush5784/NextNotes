@@ -68,7 +68,6 @@ const BlockDataSchema = z.union([
 export const NoteSchema = z.object({
   time: z.number(),
   noteId: z.string(),
-  email: z.string().email(),
   blocks: z.array(BlockDataSchema).optional(),
   version: z.string(),
 });
