@@ -1,11 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/config/Auth";
 
 export async function POST(req: NextRequest) {
   try {
-    const { idsArray, email }: { idsArray: number[] | number; email: string } =
+    const { idsArray }: { idsArray: number[] | number; email: string } =
       await req.json();
 
+    const session = await getServerSession(authOptions);
+    const email = session?.user.email;
+
+    if (!email) {
+      return NextResponse.json({
+        success: false,
+        message: "UnAuthorized user",
+      });
+    }
     // Convert to array if a single ID is passed
     const ids = Array.isArray(idsArray) ? idsArray : [idsArray];
 

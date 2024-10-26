@@ -26,7 +26,6 @@ const Page = () => {
   const handlerDeleteALLNotes = async (id: number | number[]) => {
     await toast.promise(
       axios.post(`/api/notes/deleteAllNotes`, {
-        email: session?.user?.email,
         idsArray: Array.isArray(id) ? id : [id],
       }),
       {
@@ -42,7 +41,6 @@ const Page = () => {
   const handlerRestoreNote = async (id: number | number[]) => {
     await toast.promise(
       axios.post(`/api/notes/restoreNotes`, {
-        email: session?.user?.email,
         idsArray: Array.isArray(id) ? id : [id],
       }),
       {

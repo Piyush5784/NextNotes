@@ -52,7 +52,6 @@ const NotePage = () => {
       return toast.error("No user logged in or no data to save");
     }
     const note = {
-      email: session.user.email,
       noteId,
       time: editorjsData.time,
       blocks: editorjsData.blocks,

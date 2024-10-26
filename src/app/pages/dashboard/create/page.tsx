@@ -39,7 +39,6 @@ const Page = () => {
 
   const handleSave = async () => {
     const note = {
-      email: session?.user?.email,
       noteId: String(notes.length + 1),
       time: editorData.time,
       blocks: editorData.blocks,
