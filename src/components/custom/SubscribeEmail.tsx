@@ -51,7 +51,7 @@ const SubscribeEmail = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
         <Input
-          className="flex-1 p-3 md:p-0"
+          className="flex-1 p-3 "
           placeholder="Enter your email"
           type="email"
           {...register("email")}

@@ -13,7 +13,7 @@ export default function Appbar() {
     <header className="sticky top-0 p-2  border-purple-400 z-50 w-full px-2 border-b-[1px]  bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <motion.div
         className="container mx-auto flex h-14 items-center justify-between px-4 md:px-20 "
-        initial={{ y: -50 }}
+        initial={{ y: -150 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
       >
