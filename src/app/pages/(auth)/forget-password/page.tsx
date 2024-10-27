@@ -39,9 +39,9 @@ export default function MyForm() {
       const res = await axios.post("/api/auth/user/forget-password", {
         email: values.email,
       });
-      console.log(res);
       if (res.status === 200) {
         setResponse({ success: res.data.success, message: res.data.message });
+        form.reset();
         toast.success(res.data.message);
       } else {
         setResponse({ success: false, message: res.data.message });

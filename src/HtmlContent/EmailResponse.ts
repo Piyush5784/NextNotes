@@ -31,6 +31,8 @@ export const htmlContentForPasswordReset = ({
     <div style="text-align: center; margin: 20px 0;">
       <a href="${resetLink}" style="font-size: 16px; color: #ffffff; background-color: #4a90e2; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a>
     </div>
+
+    Or paste link in the browser:- ${resetLink}
     <p>If you didn't request this, please ignore this email.</p>
     <p>Best regards,<br><strong>The NextNotes Team</strong></p>
     <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">

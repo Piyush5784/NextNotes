@@ -1,6 +1,5 @@
 import { sendVerificationEmailForgetPassword } from "@/helpers/sendVerificationEmail";
 import { resetEmailSchema } from "@/schema/zodValidationSchema";
-import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../../prisma";
 
@@ -38,6 +37,15 @@ export async function POST(req: NextRequest) {
     const newTime = new Date();
     newTime.setMinutes(newTime.getMinutes() + 5);
     const username = existingUser.username;
+
+    const isCodeAlreadySent = existingUser.verifyCodeExpiry > new Date();
+
+    if (isCodeAlreadySent) {
+      return NextResponse.json({
+        success: false,
+        message: "Reset Password link already sent to your mail",
+      });
+    }
 
     await prisma.user.update({
       where: {

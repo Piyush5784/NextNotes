@@ -13,8 +13,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { useParams, useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { MouseEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -39,8 +38,8 @@ export default function MyForm() {
     resolver: zodResolver(formSchema),
     mode: "onChange",
     defaultValues: {
-      password: "8t42nfq9",
-      confirm_password: "8t42nfq9",
+      password: "",
+      confirm_password: "",
     },
   });
   const router = useRouter();
@@ -69,6 +68,7 @@ export default function MyForm() {
       if (res.status === 200) {
         setResponse({ success: res.data.success, message: res.data.message });
         toast.success(res.data.message);
+        form.reset();
         let countdown = 3;
 
         const countdownInterval = setInterval(() => {
