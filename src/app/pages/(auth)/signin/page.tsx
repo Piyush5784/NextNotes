@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { LoginFormSchema } from "@/schema/zodValidationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { Link } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { MouseEvent, useState } from "react";
@@ -29,7 +28,7 @@ export default function ProfileForm() {
     resolver: zodResolver(LoginFormSchema),
     mode: "onChange",
     defaultValues: {
-      email: "",
+      usernameOrEmail: "",
       password: "",
     },
   });
@@ -51,7 +50,12 @@ export default function ProfileForm() {
     setError("");
     setSuccess("");
     try {
-      const res = await signIn("credentials", { ...values, redirect: false });
+      const res = await signIn("credentials", {
+        username: values.usernameOrEmail,
+        email: values.usernameOrEmail,
+        password: values.password,
+        redirect: false,
+      });
 
       if (res?.ok) {
         toast.success("User Successfully logged in");
@@ -66,6 +70,11 @@ export default function ProfileForm() {
 
     form.reset();
     setLoading(false);
+  }
+
+  function handleResetPasswordRedirect(e: MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    return router.push("/pages/forget-password");
   }
 
   if (status == "authenticated" && session) {
@@ -91,18 +100,17 @@ export default function ProfileForm() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
-                name="email"
+                name="usernameOrEmail"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                      Email
+                      Email or username
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter email"
+                        placeholder="Enter email or username"
                         {...field}
                         autoFocus
-                        autoComplete="email"
                         className="block w-full px-4 py-2 text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                       />
                     </FormControl>
@@ -142,7 +150,17 @@ export default function ProfileForm() {
                         </Button>
                       </div>
                     </FormControl>
+
                     <FormMessage />
+                    <div className="text-right">
+                      <Button
+                        className="bg-none"
+                        onClick={(e) => handleResetPasswordRedirect(e)}
+                        variant={"link"}
+                      >
+                        Forget password?
+                      </Button>
+                    </div>
                   </FormItem>
                 )}
               />

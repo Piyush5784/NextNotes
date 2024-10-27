@@ -1,6 +1,5 @@
 "use client";
 
-import Appbar from "@/components/custom/Appbar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,13 +18,13 @@ import { OtpValidationSchema } from "@/schema/zodValidationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosResponse } from "axios";
 import { motion } from "framer-motion";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { z } from "zod";
 import { FormResponseMessage } from "../../signin/component/FormError";
+import Timer from "./components/Timer";
 
 const VerifyCodePage = () => {
   const { username } = useParams();
@@ -96,28 +95,29 @@ const VerifyCodePage = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <div className="flex items-center justify-center">
-                        <InputOTP
-                          maxLength={6}
-                          {...field}
-                          disabled={loading}
-                          className="flex items-center justify-center"
-                        >
-                          <InputOTPGroup>
-                            <InputOTPSlot index={0} />
-                            <InputOTPSlot index={1} />
-                            <InputOTPSlot index={2} />
-                          </InputOTPGroup>
-                          <InputOTPSeparator />
-                          <InputOTPGroup>
-                            <InputOTPSlot index={3} />
-                            <InputOTPSlot index={4} />
-                            <InputOTPSlot index={5} />
-                          </InputOTPGroup>
-                        </InputOTP>
-                      </div>
-
-                      {/* <Input
+                      <div className="">
+                        {" "}
+                        <div className="flex items-center justify-center">
+                          <InputOTP
+                            maxLength={6}
+                            {...field}
+                            disabled={loading}
+                            className="flex items-center justify-center"
+                          >
+                            <InputOTPGroup>
+                              <InputOTPSlot index={0} />
+                              <InputOTPSlot index={1} />
+                              <InputOTPSlot index={2} />
+                            </InputOTPGroup>
+                            <InputOTPSeparator />
+                            <InputOTPGroup>
+                              <InputOTPSlot index={3} />
+                              <InputOTPSlot index={4} />
+                              <InputOTPSlot index={5} />
+                            </InputOTPGroup>
+                          </InputOTP>
+                        </div>
+                        {/* <Input
                         placeholder="Enter Otp"
                         {...field}
                         autoFocus
@@ -125,6 +125,8 @@ const VerifyCodePage = () => {
                         type="number"
                         className="block w-full px-4 py-2 text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                       /> */}
+                        <Timer duration={300} />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

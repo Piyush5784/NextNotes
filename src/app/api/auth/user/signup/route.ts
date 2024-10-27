@@ -1,12 +1,24 @@
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
+import { RateLimiterMemory, RateLimiterRes } from "rate-limiter-flexible";
 import prisma from "../../../../../../prisma";
+
+// Set up rate limiter to allow 5 requests per minute
+const rateLimiter = new RateLimiterMemory({
+  points: 5,
+  duration: 60, // per 60 seconds
+});
 
 export async function POST(req: NextRequest) {
   try {
-    const { username, email, password } = await req.json();
+    // Get client IP address
+    const ip = req.headers.get("x-forwarded-for") || req.ip || "unknown";
 
+    // Check rate limit
+    await rateLimiter.consume(ip);
+
+    const { username, email, password } = await req.json();
     const newEmail = email.toLowerCase();
 
     const existingUser = await prisma.user.findFirst({
@@ -25,11 +37,11 @@ export async function POST(req: NextRequest) {
         // User exists but is not verified
         const hashedPassword = await bcrypt.hash(password, 10);
         const verifyCode = Math.floor(100000 + Math.random() * 900000);
-        const expiryDate = new Date(Date.now() + 5 * 60 * 1000); // Set expiry to 5 minutes
+        const expiryDate = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
         await prisma.user.update({
           where: {
-            id: existingUser.id, // Use unique ID for updating
+            id: existingUser.id,
           },
           data: {
             username,
@@ -63,8 +75,7 @@ export async function POST(req: NextRequest) {
     // Register a new user
     const hashedPassword = await bcrypt.hash(password, 10);
     const verifyCode = Math.floor(Math.random() * 1000000);
-    const expiryDate = new Date(Date.now() + 5 * 60 * 1000); // Set expiry to 5 minutes
-    // newEmail is already declared above, no need to redeclare it here
+    const expiryDate = new Date(Date.now() + 5 * 60 * 1000);
 
     await prisma.user.create({
       data: {
@@ -95,6 +106,17 @@ export async function POST(req: NextRequest) {
       message: "User registered successfully. Please verify your email",
     });
   } catch (error) {
+    // Handle rate limit error
+    if (error instanceof RateLimiterRes) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Too many requests. Please try again later.",
+        },
+        { status: 429 }
+      );
+    }
+
     console.error("Error registering user", error);
     return NextResponse.json(
       {
