@@ -12,6 +12,11 @@ export const authOptions: AuthOptions = {
           type: "text",
           placeholder: "Enter your Email",
         },
+        username: {
+          label: "Username",
+          type: "text",
+          placeholder: "Enter your username",
+        },
         password: {
           label: "Password",
           type: "password",
@@ -19,19 +24,22 @@ export const authOptions: AuthOptions = {
         },
       },
       async authorize(credentials) {
-        const email = credentials?.email.toLowerCase();
+        const username = credentials?.email;
+        const email = credentials?.username;
         const password = credentials?.password;
-
-        const validation = LoginFormSchema.safeParse({ email, password });
+        const validation = LoginFormSchema.safeParse({
+          usernameOrEmail: username || email,
+          password,
+        });
 
         if (!validation.success) {
           throw new Error("username or password is invalid");
         }
 
         try {
-          const existingUser = await prisma.user.findUnique({
+          const existingUser = await prisma.user.findFirst({
             where: {
-              email,
+              OR: [{ email }, { username }],
             },
             include: {
               Note: true,

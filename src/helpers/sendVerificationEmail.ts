@@ -1,3 +1,4 @@
+import { htmlContentForPasswordReset } from "@/HtmlContent/EmailResponse";
 import nodemailer from "nodemailer";
 
 interface ApiResponse {
@@ -48,6 +49,50 @@ export async function sendVerificationEmail(
       to: email,
       subject: "Your NextNotes Verification Code",
       html: htmlContent, // HTML body
+    });
+    return {
+      success: true,
+      message: "Verification email sent successfully",
+    };
+  } catch (error) {
+    console.error("Error sending verification email", error);
+    return {
+      success: false,
+      message: "Failed to send verification email",
+    };
+  }
+}
+
+interface forgetPasswordProps {
+  email: string;
+  resetLink: string;
+  username: string;
+}
+
+export async function sendVerificationEmailForgetPassword({
+  email,
+  resetLink,
+  username,
+}: forgetPasswordProps): Promise<ApiResponse> {
+  try {
+    const user = process.env.GMAIL;
+    const pass = process.env.GMAIL_PASS;
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user,
+        pass,
+      },
+      tls: {
+        rejectUnauthorized: false, // Add this to accept self-signed certificates
+      },
+    });
+
+    const info = await transporter.sendMail({
+      from: `"NextNotes" ${user}`,
+      to: email,
+      subject: "Your Reset password link",
+      html: htmlContentForPasswordReset({ resetLink, username }), // HTML body
     });
     return {
       success: true,

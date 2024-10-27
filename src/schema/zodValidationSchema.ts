@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 export const LoginFormSchema = z.object({
-  email: z
+  usernameOrEmail: z
     .string({
-      message: "Invalid email",
+      message: "Invalid Input",
     })
-    .email(),
+    .regex(/^[a-zA-Z0-9@.]+$/, "Invalid username or email"),
   password: z.string({
     message: "password is required",
   }),
@@ -35,4 +35,8 @@ export const RegisterFormSchema = z.object({
 
 export const OtpValidationSchema = z.object({
   otp: z.string({ message: "otp is required" }),
+});
+
+export const resetEmailSchema = z.object({
+  email: z.string().email(),
 });
