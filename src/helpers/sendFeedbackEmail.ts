@@ -25,7 +25,7 @@ export async function sendFeedbackEmail(
     const feedbackContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
           <h2 style="text-align: center; color: #4a90e2;">New Feedback from NextNotes</h2>
-          <p><strong>Name:</strong> ${name}</p>
+         
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Issue tag:</strong> ${values.tag}</p>
           <p><strong>Feedback:</strong></p>

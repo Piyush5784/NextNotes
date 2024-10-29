@@ -3,6 +3,7 @@ import { BackgroundBeamsWithCollision } from "../acernity-components/Background-
 import CustomCard from "./card/CustomCard";
 import { CardHoverEffect } from "./CardHover";
 import SubscribeEmailSection from "./SubscribeEmailSection";
+import SpotlightSection from "./Spotlight/SpotlightSection";
 
 export default function Home() {
   return (
@@ -32,6 +33,8 @@ export default function Home() {
           </BackgroundBeamsWithCollision>
 
           <CustomCard />
+
+          <SpotlightSection />
         </main>
 
         {/* Footer */}

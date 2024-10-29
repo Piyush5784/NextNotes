@@ -24,30 +24,43 @@ import { feedbackForm } from "@/types/Ztypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import * as z from "zod";
 
 export default function MyForm() {
   const { data: session, status } = useSession();
   const form = useForm<z.infer<typeof feedbackForm>>({
     resolver: zodResolver(feedbackForm),
+    defaultValues: {
+      tag: "",
+      Description: "",
+    },
   });
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
+
   async function onSubmit(values: z.infer<typeof feedbackForm>) {
+    setLoading(true);
     try {
       if (status == "unauthenticated") {
-        return toast.error("Please login to proceed ");
+        toast.error("Please login to proceed ");
+        return;
       }
       const res = await sendFeedbackEmail(values, session?.user.email);
       if (res.success) {
         form.reset();
         toast.success("Your response is successfully recorded");
+        return router.push("/");
       }
     } catch (error) {
       console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
+      return toast.error("Failed to submit the form. Please try again.");
+    } finally {
+      setLoading(false);
     }
   }
   return (
@@ -113,7 +126,11 @@ export default function MyForm() {
                 )}
               />
               <Button type="submit" variant={"outline"}>
-                Submit
+                {loading ? (
+                  <AiOutlineLoading3Quarters className="animate-spin mx-2" />
+                ) : (
+                  "Submit"
+                )}
               </Button>
             </form>
           </Form>{" "}
