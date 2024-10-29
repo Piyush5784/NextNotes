@@ -85,3 +85,8 @@ export const SubscribeEmailSchema = z.object({
     .min(1, { message: "Email is required" })
     .email({ message: "Invalid email address" }),
 });
+
+export const feedbackForm = z.object({
+  tag: z.string(),
+  Description: z.string(),
+});

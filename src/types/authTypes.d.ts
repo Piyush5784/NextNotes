@@ -1,3 +1,4 @@
+import { loginMethod } from "@prisma/client";
 import "next-auth";
 
 interface Note {
@@ -18,6 +19,7 @@ declare module "next-auth" {
     username?: string;
     email?: string;
     notes?: Note[] | [];
+    loginMethod?: loginMethod;
   }
 
   interface Session {

@@ -33,12 +33,15 @@ export async function POST(req: NextRequest) {
     }
 
     const code = Math.floor(Math.random() * 1000000);
-    const resetLink = `${process.env.NEXTAUTH_URL}/pages/reset-password/${code}?email=${email}`;
+    const resetLink = `${
+      process.env.NEXTAUTH_URL
+    }/pages/reset-password/${code}?email=${encodeURIComponent(email)}`;
     const newTime = new Date();
     newTime.setMinutes(newTime.getMinutes() + 5);
     const username = existingUser.username;
 
-    const isCodeAlreadySent = existingUser.verifyCodeExpiry > new Date();
+    const isCodeAlreadySent =
+      existingUser.verifyCode && existingUser.verifyCodeExpiry > new Date();
 
     if (isCodeAlreadySent) {
       return NextResponse.json({

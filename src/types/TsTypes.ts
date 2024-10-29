@@ -38,3 +38,8 @@ export type UserWithNotes = {
   image?: string | null; // User's image
   notes?: Note[]; // User's notes
 };
+
+export enum loginMethod {
+  "google",
+  "credentials",
+}

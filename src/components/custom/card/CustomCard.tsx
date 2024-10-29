@@ -9,7 +9,7 @@ const CustomCard = () => {
         <div className="card__border"></div>
         <div className="card_title__container">
           {/* <span className="card_title"></span> */}
-          <p className="text-xl px-3">
+          <p className="text-xl px-3 text-white">
             Join our community and contribute to our projects on GitHub! We Are
             Open Source
           </p>
