@@ -33,16 +33,16 @@ export default function Appbar() {
             Features
           </Link>
           <Link
-            href="#pricing"
-            className="transition-colors hover:text-foreground/80 text-foreground/60"
-          >
-            Pricing
-          </Link>
-          <Link
-            href="#about"
+            href="/pages/feedback"
             className="transition-colors hover:text-foreground/80 text-foreground/60"
           >
             About
+          </Link>
+          <Link
+            href="/pages/feedback"
+            className="transition-colors hover:text-foreground/80 text-foreground/60"
+          >
+            Feedback
           </Link>
         </nav>
 
@@ -63,7 +63,11 @@ export default function Appbar() {
       </motion.div>
 
       {/* Mobile Menu */}
-      <div className="absolute w-[90%] dark:text-black">
+      <div
+        className={`absolute w-[90%] dark:text-black duration-300 ${
+          showMenu ? "top-30" : "top-[-500px]"
+        }`}
+      >
         <div
           className={`flex duration-300 flex-col w-full bg-primary dark:text-white border justify-center items-center shadow-xl relative ${
             showMenu ? "top-0" : "top-[-500px]"

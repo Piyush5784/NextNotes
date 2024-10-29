@@ -30,7 +30,7 @@ const Page = () => {
       {
         id: "1",
         type: "paragraph",
-        data: { text: "My initial note" },
+        data: { text: "My first note" },
       },
     ],
   };

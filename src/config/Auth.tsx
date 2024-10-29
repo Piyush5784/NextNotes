@@ -1,6 +1,7 @@
 import { LoginFormSchema } from "@/schema/zodValidationSchema";
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 import prisma from "../../prisma";
 export const authOptions: AuthOptions = {
   providers: [
@@ -65,14 +66,30 @@ export const authOptions: AuthOptions = {
             isVerified: existingUser.isVerified,
             username: existingUser.username,
             notes,
+            loginMethod: existingUser.loginMethod,
           };
         } catch (error: any) {
           throw new Error(error);
         }
       },
     }),
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
   ],
   callbacks: {
+    signIn({ account, user }) {
+      if (
+        account?.provider == "google" &&
+        !(user.loginMethod == "credentials")
+      ) {
+        throw new Error(
+          "You have registered with credentials(username, password). Please use the same method"
+        );
+      }
+      return true;
+    },
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -84,7 +101,7 @@ export const authOptions: AuthOptions = {
 
       return token;
     },
-    async session({ session, user }) {
+    session({ session, user }) {
       if (user) {
         session.user.email = user.email;
         session.user.isVerified = user.isVerified;
@@ -97,6 +114,7 @@ export const authOptions: AuthOptions = {
   },
   pages: {
     signIn: "/pages/signin",
+    error: "/pages/error",
   },
-  secret: process.env.NEXTAUTH_SECRET || "mysecpassword",
+  secret: process.env.NEXTAUTH_SECRET,
 };

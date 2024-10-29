@@ -1,7 +1,7 @@
 import { htmlContentForPasswordReset } from "@/HtmlContent/EmailResponse";
 import nodemailer from "nodemailer";
 
-interface ApiResponse {
+export interface ApiResponse {
   success: boolean;
   message: string;
 }

@@ -77,6 +77,16 @@ export default function ProfileForm() {
     return router.push("/pages/forget-password");
   }
 
+  async function handleGoogleLogin(
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) {
+    e.preventDefault();
+    try {
+      const res = await signIn("google", { redirect: false });
+      console.log(res);
+    } catch (error) {}
+  }
+
   if (status == "authenticated" && session) {
     return router.push("/pages/dashboard");
   }
@@ -84,10 +94,10 @@ export default function ProfileForm() {
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, y: 50 }}
+        initial={{ opacity: 50, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="min-h-screen bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center"
+        className="h-screen bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center"
       >
         <div className="bg-white dark:bg-gray-900 shadow-lg rounded-lg w-full max-w-lg p-8">
           <h1 className="text-4xl font-bold text-center text-gray-900 dark:text-white mb-6">
@@ -154,7 +164,7 @@ export default function ProfileForm() {
                     <FormMessage />
                     <div className="text-right">
                       <Button
-                        className="bg-none"
+                        className="bg-none text-purple-950 dark:text-purple-400"
                         onClick={(e) => handleResetPasswordRedirect(e)}
                         variant={"link"}
                       >
@@ -186,7 +196,7 @@ export default function ProfileForm() {
             </form>
           </Form>
 
-          <div className="flex gap-2 p-5 justify-center text-center items-center">
+          <div className="flex gap-2 justify-center text-center items-center">
             Don't have an account?{" "}
             <Button
               onClick={() => router.push("/pages/signup")}
@@ -201,18 +211,22 @@ export default function ProfileForm() {
             <div className="w-full h-px bg-gray-300"></div>
             <span className="mx-4 text-gray-500 dark:text-gray-400">or</span>
             <div className="w-full h-px bg-gray-300"></div>
-          </div> */}
+          </div>
 
-          {/* <div className="grid grid-cols-2 gap-4"> */}
-          {/* <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button className="w-full flex items-center justify-center bg-white text-gray-900 dark:bg-gray-700 dark:text-white border border-gray-300 dark:border-gray-700 rounded-md py-2 shadow-md hover:bg-gray-100 dark:hover:bg-gray-600">
+          <div className="grid grid-cols-2 gap-4">
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                className="w-full flex items-center justify-center bg-white text-gray-900 dark:bg-gray-700 dark:text-white border border-gray-300 dark:border-gray-700 rounded-md py-2 shadow-md hover:bg-gray-100 dark:hover:bg-gray-600"
+                onClick={(e) => handleGoogleLogin(e)}
+              >
                 <IconContext.Provider value={{ size: "20" }}>
-                  <FcGoogle className="mr-2" />
+                  <BsGoogle className="mr-2" />
                 </IconContext.Provider>
                 Google
               </Button>
-            </motion.div> */}
-
+            </motion.div>
+          </div> */}
+          {/* 
           {/* <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button className="w-full flex items-center justify-center bg-white text-gray-900 dark:bg-gray-700 dark:text-white border border-gray-300 dark:border-gray-700 rounded-md py-2 shadow-md hover:bg-gray-100 dark:hover:bg-gray-600">
                 <IconContext.Provider value={{ size: "20" }}>

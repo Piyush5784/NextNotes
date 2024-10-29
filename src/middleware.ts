@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  const restrictedRoutes = ["/dashboard", "/pages/dashboard"];
+  const restrictedRoutes = ["/dashboard", "/pages/dashboard", "/feedback"];
   const isRestrictedRoute = restrictedRoutes.some((route) =>
     req.nextUrl.pathname.startsWith(route)
   );

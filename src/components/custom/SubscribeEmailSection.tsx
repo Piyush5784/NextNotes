@@ -11,7 +11,7 @@ const SubscribeEmailSection = () => {
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Start Organizing Your Thoughts Today
           </h2>
-          <p className="max-w-2xl text-lg md:text-xl">
+          <p className="max-w-2xl text-lg md:text-xl text-black dark:text-white ">
             Join thousands of users who have transformed their note-taking
             experience with NextNotes.
           </p>
