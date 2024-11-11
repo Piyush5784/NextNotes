@@ -72,7 +72,7 @@ const CustomCard = () => {
         <div className="flex justify-center items-center">
           <Button asChild>
             <Link
-              href="https://github.com"
+              href="https://github.com/Piyush5784/NextNotes"
               className="button flex items-center justify-center w-10 "
               // target="_blank"
             >
