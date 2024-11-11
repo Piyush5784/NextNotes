@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 
 const AllNotes = async () => {
-  const email = "piyushjha5668@gmail.com";
+  const email = "";
 
   // const email = user.data?.user?.email;
 
