@@ -2,7 +2,6 @@
   "extends": ["next/core-web-vitals", "next/typescript"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
-
     "@next/next/no-img-element": "off",
     "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
     "@typescript-eslint/ban-ts-comment": [
@@ -19,7 +18,7 @@
     "react/no-unescaped-entities": "off",
     "@next/next/no-page-custom-font": "off",
     "@typescript-eslint/no-empty-interface": "off",
-
+    "no-var": "off",
     // Disable additional rules
     "no-console": "off", // Disable warnings for console.log
     "@typescript-eslint/explicit-module-boundary-types": "off", // Disable explicit return types for functions
