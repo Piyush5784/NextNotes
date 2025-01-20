@@ -1,4 +1,3 @@
-// components/MusicPlayer.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -31,7 +30,6 @@ const Player = () => {
 
   const handleSongChange = (song: any) => {
     setTrack(song);
-    console.log(song);
     setPlayingSong(song.previewUrl);
   };
 
@@ -84,7 +82,7 @@ const Player = () => {
       {playingSong && (
         <div className="mt-4">
           <h3 className="text-xl">Now Playing:</h3>
-          <audio controls src={playingSong} autoPlay className="w-full mt-2" />
+          <audio controls src={playingSong} className="w-full mt-2" />
         </div>
       )}
     </div>

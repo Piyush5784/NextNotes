@@ -19,7 +19,6 @@ model Note {
   Trash     Boolean  @default(false)
   Favorite  Boolean  @default(false)
 
-  // Optional: Index on time for better query performance
   @@index([time])
 }
 
@@ -34,8 +33,7 @@ model User {
   loginMethod      loginMethod @default(credentials)
   Note             Note[]
 
-  // Optional: Cascade delete behavior for Notes and Trash when user is deleted
-  @@index([username]) // Index on username for faster lookup
+  @@index([username]) 
 }
 
 model SubscribedUsers {

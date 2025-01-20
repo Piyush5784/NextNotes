@@ -49,7 +49,6 @@ export async function POST(req: NextRequest) {
 
     const compare = dbCode == Number(code); // Compare the plain code with the hashed code
 
-    // Check if the verification code is valid and not expired
     if (!isCodeNotExpired) {
       return NextResponse.json({
         success: false,
