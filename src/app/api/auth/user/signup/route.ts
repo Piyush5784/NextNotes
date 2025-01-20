@@ -1,8 +1,8 @@
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
+import prisma from "@/lib/db";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 import { RateLimiterMemory, RateLimiterRes } from "rate-limiter-flexible";
-import prisma from "../../../../../../prisma";
 
 // Set up rate limiter to allow 5 requests per minute
 const rateLimiter = new RateLimiterMemory({

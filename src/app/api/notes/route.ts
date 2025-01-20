@@ -1,7 +1,7 @@
 import { NoteSchema } from "@/types/Ztypes";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../../../prisma";
+import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/config/Auth";
 

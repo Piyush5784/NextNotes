@@ -1,6 +1,6 @@
 import { SubscribeEmailSchema } from "@/types/Ztypes";
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../../../prisma";
+import prisma from "@/lib/db";
 
 // Define the API handler
 export async function POST(req: NextRequest) {

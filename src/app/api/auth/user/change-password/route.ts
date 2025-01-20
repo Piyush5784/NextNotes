@@ -1,7 +1,7 @@
+import prisma from "@/lib/db";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import prisma from "../../../../../../prisma";
 
 const validation = z.object({
   email: z.string().email(),

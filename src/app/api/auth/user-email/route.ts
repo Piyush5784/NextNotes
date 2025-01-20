@@ -1,3 +1,4 @@
+"use server";
 import { authOptions } from "@/config/Auth";
 import { getServerSession } from "next-auth";
 
