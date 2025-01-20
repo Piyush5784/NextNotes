@@ -1,8 +1,9 @@
+import prisma from "@/lib/db";
 import { LoginFormSchema } from "@/schema/zodValidationSchema";
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import prisma from "../../prisma";
+
 export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
@@ -78,6 +79,7 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
   ],
+
   callbacks: {
     signIn({ account, user }) {
       if (

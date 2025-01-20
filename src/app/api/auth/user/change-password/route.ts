@@ -1,7 +1,7 @@
+import prisma from "@/lib/db";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import prisma from "../../../../../../prisma";
 
 const validation = z.object({
   email: z.string().email(),
@@ -49,7 +49,6 @@ export async function POST(req: NextRequest) {
 
     const compare = dbCode == Number(code); // Compare the plain code with the hashed code
 
-    // Check if the verification code is valid and not expired
     if (!isCodeNotExpired) {
       return NextResponse.json({
         success: false,

@@ -1,7 +1,7 @@
 import { sendVerificationEmailForgetPassword } from "@/helpers/sendVerificationEmail";
+import prisma from "@/lib/db";
 import { resetEmailSchema } from "@/schema/zodValidationSchema";
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../../../../../prisma";
 
 export async function POST(req: NextRequest) {
   try {

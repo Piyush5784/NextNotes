@@ -1,13 +1,11 @@
-import { authOptions } from "@/config/Auth";
+"use server";
 import { getServerSession } from "next-auth";
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
-
-  if (session) {
-    const email = session.user?.email;
-    return email;
-  } else {
+  const session = await getServerSession();
+  try {
+    return session ? session.user.email : null;
+  } catch (error) {
     return null;
   }
 }
