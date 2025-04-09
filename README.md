@@ -3,6 +3,10 @@
 An Application where users can login/signin and write anything as a note, and access it later.
 It is made it in a way where anyone can access their notes without using browser client, and can also send request via postman, hopescotch or any other client.
 
+## Demo
+
+https://github.com/user-attachments/assets/faade544-b1a3-4334-8459-a52761be4e3c
+
 ## Features
 
 - User authentication (Login/Signup).
